@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Questionário - A1</title>
+<style>
+  .but{font-size: 20px; background-color: black; color: limegreen;}
+  .titulo{font-size: 30px;} 
+  body{font-family: Arial, sans-serif; background-color: black; color:limegreen; padding:12px; max-width:720px; margin:auto;}
+  .container{margin:0 auto;}
+  .theme{font-size:25px; font-weight:700; margin-top:18px; margin-bottom:6px;}
+  .question{font-size:16px; margin:12px 0;}
+  .opts{list-style:none; padding:0;}
+  .opts li{margin:8px 0;}
+  button.opt{font-size: 20px; display:block; width:100%; text-align:left; padding:10px; border:1px solid #ccc; background:black; color: limegreen; border-radius:6px; cursor:pointer;}
+  button.opt:disabled{opacity:0.6; cursor:default;}
+  .feedback{margin-top:8px; font-weight:700;}
+  .correct{color:limegreen;}
+  .wrong{color:darkred;}
+  .nav{display:flex; justify-content:space-between; margin-top:18px;}
+  .small{font-size:13px; color:#555;}
+  .score{font-size:18px; font-weight:700; margin-top:12px;}
+  .footer{margin-top:20px; font-size:13px; color:#333;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2 class="titulo">Questionário - A1</h2>
+  <div id="quiz"></div>
+  <div class="nav">
+    <button class="but" id="prevBtn">Anterior</button>
+    <button class="but" id="nextBtn">Próxima</button>
+  </div>
+  <div id="result" class="score" style="display:none;"></div>
+  <div class="footer">Segurança Digital – Redes de Computadores.</div>
+</div>
+
+<script>
+//Q1 fff e 000 ccc f9f9f9
+const questions = [{"theme": "O que é uma rede cabeada?", 
+"opts": ["A) Um tipo de rede que transmite dados por meio de sinais de rádio.", 
+"B) Uma rede de computadores que utiliza cabos físicos, como cabo Ethernet, para conectar dispositivos e transmitir dados.", 
+"C) Um sistema de comunicação exclusivo para smartphones, que utiliza cabos para acesso à internet.", 
+"D) Uma tecnologia que permite conexão entre dispositivos apenas por meio de satélites."], "a": 1}, 
+//Q2
+{"theme": "O que é uma rede wireless ou sem fio?", 
+"opts": ["A) Um tipo de rede que transmite dados por meio de sinais de rádio.", 
+"B) Uma rede de computadores que utiliza cabos físicos, como cabo Ethernet, para conectar dispositivos e transmitir dados.", 
+"C) Um sistema de comunicação exclusivo para smartphones, que utiliza cabos para acesso à internet.", 
+"D) Uma tecnologia que permite conexão entre dispositivos apenas por meio de satélites."], "a": 0},
+//Q3
+{"theme": "Em qual país foi desenvolvida a primeira forma da internet moderna?", 
+"opts": ["A) Reino Unido.", 
+"B) Coreia do Norte.", 
+"C) Arábia Saudita.", 
+"D) Estados Unidos."], "a": 3},
+//Q4
+{"theme": "Qual foi o nome da primeira rede de computadores criada, precursora da internet moderna?", 
+"opts": ["A) ARPANET.", 
+"B) NPL.", 
+"C) Internet.", 
+"D) Wi-Fi."], "a": 0},
+//Q5
+{"theme": "Quem criou o sistema de documentos interligados e acessíveis pela internet, conhecido como World Wide Web?", 
+"opts": ["A) Bill Gates.", 
+"B) Alan Turing.", 
+"C) Tim Berners-Lee.", 
+"D) Linus Torvalds."], "a": 2},
+//Q6
+{"theme": "De que forma um dispositivo é identificado dentro de uma rede de computadores?", 
+"opts": ["A) Apenas por meio do endereço IP.", 
+"B) Pelo seu número de IMEI.", 
+"C) Por meio de endereços específicos, como o endereço IP e o endereço MAC.", 
+"D) Pelo tipo de conexão usada, como Wi-Fi ou cabo Ethernet."], "a": 2},
+//Q7
+{"theme": "O endereço IP pode ser atribuído automaticamente pelo roteador por meio de qual serviço?", 
+"opts": ["A) FTP.", 
+"B) HTTP.", 
+"C) DNS.", 
+"D) DHCP."], "a": 3},
+//Q8
+{"theme": "O que ocorre na rede quando dois dispositivos utilizam o mesmo endereço IP ou o mesmo endereço MAC?", 
+"opts": ["A) Ocorrem conflitos de endereço, causando falhas de comunicação, instabilidade e possível perda de conexão.", 
+"B) Nada acontece, pois a rede permite que vários dispositivos usem o mesmo endereço sem conflitos.", 
+"C) O roteador aumenta a velocidade da conexão para evitar colisões entre os dispositivos.", 
+"D) A rede automaticamente escolhe qual dispositivo deve funcionar e desativa o outro."], "a": 0},
+//Q9
+{"theme": "O que significa a sigla ISP?", 
+"opts": ["A) Internet Secure Protocol; responsável por proteger redes contra ataques cibernéticos.", 
+"B) Internal System Provider; responsável por gerenciar dispositivos internos de uma empresa.", 
+"C) Internet Service Provider; empresa responsável por fornecer acesso à internet aos usuários.", 
+"D) Integrated Server Platform; plataforma usada para hospedar servidores de grande porte."], "a": 2},
+//Q10
+{"theme": "O que é o DNS dentro do funcionamento da internet?", 
+"opts": ["A) Um protocolo que controla o envio de e-mails entre servidores.", 
+"B) Um sistema que traduz nomes de domínio (como google.com) em endereços IP para localizar servidores na internet.", 
+"C) Um serviço responsável por criptografar todos os dados enviados pelo usuário.", 
+"D) Um programa interno do roteador usado apenas para distribuir endereços IP na rede local."], "a": 1},
+//Qextra1
+{"theme": "Qual das alternativas representa um endereço IP?", 
+"opts": ["A) 123.456.789-10", 
+"B) 192.168.1.2", 
+"C) AC:LS:UI:TP:IK:PA", 
+"D) FF:AC:10:22:B1:9C"], "a": 1},
+//Qextra2
+{"theme": "Qual das alternativas representa um endereço MAC?", 
+"opts": ["A) 123.456.789-10", 
+"B) 192.168.1.2", 
+"C) AC:LS:UI:TP:IK:PA", 
+"D) FF:AC:10:22:B1:9C"], "a": 3},
+//Qextra3
+{"theme": "Considerando as classificações WPAN, WLAN, WMAN e WWAN, assinale a alternativa que apresenta corretamente a descrição dessas redes?", 
+"opts": ["A) WPAN conecta dispositivos em curta distância; WLAN cobre áreas como casas ou escritórios; WMAN abrange áreas metropolitanas; WWAN cobre grandes áreas usando redes celulares.", 
+"B) WPAN conecta dispositivos por cabos; WLAN conecta apenas dispositivos móveis; WMAN utiliza exclusivamente Bluetooth; WWAN cobre apenas um prédio comercial.", 
+"C) WPAN abrange áreas metropolitanas; WLAN cobre países; WMAN cobre uma sala; WWAN cobre apenas uma residência.", 
+"D) WPAN cobre bairros inteiros; WLAN cobre cidades; WMAN é restrita a ambientes internos; WWAN conecta apenas dispositivos Bluetooth."], "a": 0},
+//Q11
+{"theme": "Considerando boas práticas de segurança ao comprar pela internet, qual dos links apresenta maior probabilidade de ser de uma loja online legítima?", 
+"opts": ["A) http://loja-oficial-descontos24.com.ru/", 
+"B) http://www.loja-oficial.com.br/", 
+"C) https://pagamentos.lojaoficial-suporte.net/", 
+"D) https://www.lojaoficial.com.br/"], "a": 3},
+//Q12
+{"theme": "Um conhecido afirma que encontrou um desconto no IPVA no site oficial do DETRAN: https://www.detan.com.br/ Considerando boas práticas de segurança digital, qual deve ser sua atitude?", 
+"opts": ["A) Acessar o link, pois ele usa a terminação .com.br, o que garante que é um site oficial e seguro.", 
+"B) Ignorar o endereço e verificar as informações somente no domínio oficial do governo, que utiliza a terminação .gov.br; além disso, o link recebido apresenta nome incorreto.", 
+"C) Confiar no link porque foi enviado por alguém conhecido, já que golpes nunca utilizam HTTPS.", 
+"D) Confiar parcialmente no link, pois sites falsos nunca utilizam endereços parecidos com os de órgãos oficiais."], "a": 1}
+];
+let index = 0;
+let score = 0;
+let answered = Array(questions.length).fill(false);
+let userCorrect = Array(questions.length).fill(false);
+
+function renderQuestion(i){
+  const q = questions[i];
+  const quiz = document.getElementById('quiz');
+  quiz.innerHTML = '';
+  const themeEl = document.createElement('div'); themeEl.className='theme'; themeEl.textContent = (i+1)+'. '+q.theme;
+  const questionEl = document.createElement('div'); questionEl.className='question'; questionEl.textContent = q.q;
+  quiz.appendChild(themeEl);
+  quiz.appendChild(questionEl);
+  const ul = document.createElement('ul'); ul.className='opts';
+  q.opts.forEach((opt, idx)=> {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = opt;
+    btn.onclick = ()=> handleAnswer(i, idx, btn);
+    if(answered[i]) btn.disabled = true;
+    li.appendChild(btn);
+    ul.appendChild(li);
+  });
+  quiz.appendChild(ul);
+  const fb = document.createElement('div'); fb.id='feedback'; fb.className='feedback';
+  if(answered[i]){
+    if(userCorrect[i]){
+      fb.innerHTML = '<span class="correct">Resposta correta ✓</span>';
+    } else {
+      fb.innerHTML = '<span class="wrong">Resposta errada ✗</span> | Alternativa correta: <b>' + q.opts[q.a] + '</b>';
+    }
+    const g = document.createElement('div'); g.className='small'; g.style.marginTop='6px';
+    g.textContent = 'Gabarito: ' + q.opts[q.a];
+    quiz.appendChild(g);
+  }
+  quiz.appendChild(fb);
+  updateNav();
+}
+
+function handleAnswer(i, chosen, btn){
+  if(answered[i]) return;
+  const q = questions[i];
+  answered[i] = true;
+  const correct = (chosen === q.a);
+  userCorrect[i] = correct;
+  if(correct) score++;
+  const btns = document.querySelectorAll('.opt');
+  btns.forEach(b=> b.disabled = true);
+  const fb = document.getElementById('feedback');
+  if(correct){
+    fb.innerHTML = '<span class="correct">Resposta correta ✓</span>';
+  } else {
+    fb.innerHTML = '<span class="wrong">Resposta errada ✗</span> | Alternativa correta: <b>' + q.opts[q.a] + '</b>';
+  }
+  showResultIfFinished();
+}
+
+function updateNav(){
+  document.getElementById('prevBtn').disabled = (index === 0);
+  document.getElementById('nextBtn').disabled = (index === questions.length-1);
+}
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  if(index>0) index--;
+  renderQuestion(index);
+});
+
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(index<questions.length-1) index++;
+  renderQuestion(index);
+});
+
+function showResultIfFinished(){
+  if(answered.every(x=>x===true)){
+    const res = document.getElementById('result');
+    res.style.display='block';
+    res.textContent = 'Você acertou ' + score + ' de ' + questions.length + ' questões.';
+    if(!document.getElementById('showKeyBtn')){
+      const btn = document.createElement('button');
+      btn.id='showKeyBtn';
+      btn.textContent='Mostrar Gabarito Completo';
+      btn.style.marginTop='8px';
+      btn.onclick = showFullKey;
+      res.appendChild(document.createElement('div')).appendChild(btn);
+    }
+  }
+}
+
+function showFullKey(){
+  let out = 'Gabarito completo:\n\n';
+  questions.forEach((q, idx)=> {
+    out += (idx+1) + '. ' + q.opts[q.a] + '\n';
+  });
+  alert(out);
+}
+
+renderQuestion(index);
+
+let touchstartX = 0;
+let touchendX = 0;
+document.addEventListener('touchstart', function(event){
+  touchstartX = event.changedTouches[0].screenX;
+}, false);
+document.addEventListener('touchend', function(event){
+  touchendX = event.changedTouches[0].screenX;
+  handleGesture();
+}, false);
+function handleGesture(){
+  if(touchendX < touchstartX - 40){ 
+    if(index < questions.length-1) { index++; renderQuestion(index); }
+  }
+  if(touchendX > touchstartX + 40){ 
+    if(index > 0) { index--; renderQuestion(index); }
+  }
+}
+</script>
+</body>
+</html>
