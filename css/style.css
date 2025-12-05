@@ -20,6 +20,7 @@ h3{
 }
 .titulo{
     background-color:black;
+    color: limegreen;
 }
 .botaotam{
     display: inline-flex !important;
